@@ -1,8 +1,10 @@
 ﻿using HomeZone.Data;
 using HomeZone.Data.Models;
+using HomeZone.Web.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,13 +38,21 @@ namespace HomeZone.Web
 
             services.AddSession();
 
-            services.AddMvc();
+            services.AddDomainServices();
+
+
+            services.AddRouting(routing => routing.LowercaseUrls = true);
+
+            services.AddMvc(opt =>
+            {
+                opt.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+            });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-           
+            app.UseDatabaseMigration();
+
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink();
@@ -62,6 +72,10 @@ namespace HomeZone.Web
 
             app.UseMvc(routes =>
             {
+                routes.MapRoute(
+                    name: "areas",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");

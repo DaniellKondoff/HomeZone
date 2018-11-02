@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using static HomeZone.Data.DataConstants;
 
 namespace HomeZone.Web.Models.AccountViewModels
 {
@@ -8,6 +9,21 @@ namespace HomeZone.Web.Models.AccountViewModels
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
+
+        [Required]
+        [MinLength(UserUserNameMinLenght)]
+        [MaxLength(UserUserNameMaxLenght)]
+        public string UserName { get; set; }
+
+        [Required]
+        [MinLength(UserFirstNameMinLength)]
+        [MaxLength(UserFirstNameMaxLength)]
+        public string FirstName { get; set; }
+
+        [Required]
+        [MinLength(UserLastNameMinLength)]
+        [MaxLength(UserLastNameMaxLength)]
+        public string LastName { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
