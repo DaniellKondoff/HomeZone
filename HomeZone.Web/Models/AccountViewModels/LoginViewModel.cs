@@ -5,7 +5,6 @@ namespace HomeZone.Web.Models.AccountViewModels
     public class LoginViewModel
     {
         [Required]
-        [EmailAddress]
         public string UserName { get; set; }
 
         [Required]

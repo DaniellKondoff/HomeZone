@@ -4,4 +4,19 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="7.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HomeZone.Core\HomeZone.Core.csproj" />
+    <ProjectReference Include="..\HomeZone.Data\HomeZone.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Contracts\" />
+    <Folder Include="Implementation\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>

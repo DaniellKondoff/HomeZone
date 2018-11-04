@@ -18,5 +18,8 @@
 
         public City City { get; set; }
 
+        public bool IsSold { get; set; }
+
+        public bool IsForRent { get; set; }
     }
 }

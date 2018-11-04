@@ -1,0 +1,46 @@
+﻿@model LocationListingViewModel
+@{
+    ViewData["Title"] = "All Cities";
+}
+
+<h2>
+    @ViewData["Title"]
+    <a class="btn btn-primary" asp-action="Create">
+        Add City
+    </a>
+</h2>
+
+@if (Model.AllCities.Count() == 0)
+{
+    <h3>
+        Currently there is no cities saved
+    </h3>
+}
+else
+{
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th></th>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var city in Model.AllCities)
+            {
+                <tr>
+                    <td>
+                        @city.Name
+                    </td>
+                    <td>
+                        Add Neib
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@city.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

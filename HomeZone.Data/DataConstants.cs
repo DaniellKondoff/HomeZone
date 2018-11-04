@@ -8,5 +8,8 @@
         public const int UserLastNameMinLength = 2;
         public const int UserUserNameMaxLenght = 50;
         public const int UserUserNameMinLenght = 3;
+
+        public const int CityNameMaxLenght = 50;
+        public const int CityNameMinLenght = 4;
     }
 }

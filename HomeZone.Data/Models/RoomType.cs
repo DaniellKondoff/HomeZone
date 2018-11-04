@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace HomeZone.Data.Models
+﻿namespace HomeZone.Data.Models
 {
     public enum RoomType
     {
@@ -10,6 +6,6 @@ namespace HomeZone.Data.Models
         Двустаен = 2,
         Тристаен = 3,
         Четиристаен = 4,
-        Многостаен 5
+        Многостаен = 5
     }
 }

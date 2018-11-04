@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace HomeZone.Data.Models
 {
@@ -11,5 +9,7 @@ namespace HomeZone.Data.Models
         public string Name { get; set; }
 
         public ICollection<Section> Sections { get; set; } = new List<Section>();
+
+        public ICollection<Property> Properties { get; set; } = new List<Property>();
     }
 }

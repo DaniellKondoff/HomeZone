@@ -1,4 +1,5 @@
-﻿using HomeZone.Data;
+﻿using AutoMapper;
+using HomeZone.Data;
 using HomeZone.Data.Models;
 using HomeZone.Web.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -37,6 +38,8 @@ namespace HomeZone.Web
                 .AddDefaultTokenProviders();
 
             services.AddSession();
+
+            services.AddAutoMapper();
 
             services.AddDomainServices();
 
