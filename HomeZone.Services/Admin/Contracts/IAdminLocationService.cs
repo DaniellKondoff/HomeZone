@@ -13,5 +13,17 @@ namespace HomeZone.Services.Admin.Contracts
         Task CreateAsync(string name);
 
         Task<bool> DeleteAsync(int id);
+
+        Task<bool> ExistAsync(int id);
+
+        Task<IEnumerable<AdminSectionListingServiceModel>> AllSectionAsync(int cityId);
+
+        Task<bool> IsAssignedToCity(string sectionName, int cityId);
+
+        Task AssignedToCity(string sectionName, int cityId);
+        Task<bool> IsAssignedToCity(int sectionId, int cityId);
+
+        Task<bool> DeleteSectionAssync(int sectionId, int ityId);
+        Task<string> GetCityNameAsync(int id);
     }
 }

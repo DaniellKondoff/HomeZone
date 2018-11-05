@@ -42,7 +42,7 @@ namespace HomeZone.Web.Areas.Admin.Controllers
             }
 
             if (!ModelState.IsValid)
-            {               
+            {
                 return View(model);
             }
 
@@ -71,6 +71,87 @@ namespace HomeZone.Web.Areas.Admin.Controllers
             }
 
             return RedirectToAction(nameof(ListAll));
+        }
+
+        public async Task<IActionResult> ListSections(int id)
+        {
+            bool isCityExist = await this.locationService.ExistAsync(id);
+
+            if (!isCityExist)
+            {
+                TempData.AddErrorMessage("Invalid Request");
+
+                return RedirectToAction(nameof(ListAll));
+            }
+
+            var list = await this.locationService.AllSectionAsync(id);
+            string cityName = await this.locationService.GetCityNameAsync(id);
+
+            return View(new SectionListingViewModel
+            {
+                AllSections = list,
+                CityId = id,
+                CityName = cityName
+            });
+        }
+
+        public IActionResult CreateSection(int id)
+        {
+            return View(new SectionFormViewModel
+            {
+                CityId = id
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateSection(SectionFormViewModel model)
+        {
+            bool isCityExist = await this.locationService.ExistAsync(model.CityId);
+
+            if (!isCityExist)
+                ModelState.AddModelError(nameof(model.CityId), "That City does not exist.");
+
+            bool isAssigned = await this.locationService.IsAssignedToCity(model.Name, model.CityId);
+            if (isAssigned)
+                ModelState.AddModelError(nameof(model.Name), "That Neighborhood is already assigned to selected City");
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            await this.locationService.AssignedToCity(model.Name, model.CityId);
+            TempData.AddSuccessMessage($"Neighborhood {model.Name} has been successfully saved");
+
+            return RedirectToAction(nameof(ListSections), new { id = model.CityId });
+        }
+
+        public async Task<IActionResult> DeleteSection(SectionDeleteViewModel model)
+        {
+            bool isAssigned = await this.locationService.IsAssignedToCity(model.Id, model.Cityid);
+
+            if (!isAssigned)
+            {
+                ModelState.AddModelError(nameof(model.Id), "That City does not have such Neighborhood");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            bool success = await this.locationService.DeleteSectionAssync(model.Id, model.Cityid);
+
+            if (!success)
+            {
+                TempData.AddErrorMessage("Invalid Request");
+            }
+            else
+            {
+                TempData.AddSuccessMessage("Neighborhood has been deleted successfully");
+            }
+
+            return RedirectToAction(nameof(ListSections), new { id=model.Cityid });
         }
     }
 }

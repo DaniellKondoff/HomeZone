@@ -11,5 +11,8 @@
 
         public const int CityNameMaxLenght = 50;
         public const int CityNameMinLenght = 4;
+
+        public const int SectionNameMaxLenght = 50;
+        public const int SectionNameMinLenght = 3;
     }
 }

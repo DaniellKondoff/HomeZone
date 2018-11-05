@@ -1,0 +1,44 @@
+﻿@model SectionListingViewModel
+
+@{
+    ViewData["Title"] = Model.CityName +" Neighborhoods";
+}
+
+@{ 
+    var cityId = Model.CityId;
+}
+<h2>
+    @ViewData["Title"]
+    <a class="btn btn-primary" asp-action="CreateSection" asp-route-id="@cityId">
+        Add Neighborhood
+    </a>
+</h2>
+
+@if (Model.AllSections.Count() == 0)
+{
+    <h3>Currently there is no Neighborhoods for @Model.CityName City</h3>
+}
+else
+{
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var neibgh in Model.AllSections)
+            {
+                <tr>
+                    <td>
+                        @neibgh.Name
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" asp-action="DeleteSection" asp-route-Id="@neibgh.Id" asp-route-CityId="@cityId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
