@@ -21,5 +21,9 @@
         public bool IsSold { get; set; }
 
         public bool IsForRent { get; set; }
+
+        public int SectionId { get; set; }
+
+        public Section Section { get; set; }
     }
 }

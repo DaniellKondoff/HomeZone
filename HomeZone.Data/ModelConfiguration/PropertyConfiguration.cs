@@ -12,6 +12,12 @@ namespace HomeZone.Data.ModelConfiguration
                 .HasOne(p => p.City)
                 .WithMany(c => c.Properties)
                 .HasForeignKey(p => p.CityId);
+
+            builder
+                .HasOne(p => p.Section)
+                .WithMany(s => s.Properties)
+                .HasForeignKey(p => p.SectionId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -1,0 +1,54 @@
+﻿@model PropertyListingViewModel
+@{
+    ViewData["Title"] = "All Homes";
+}
+
+<h2>
+    @ViewData["Title"]
+    <a class="btn btn-primary" asp-action="Add">Add Home</a>
+</h2>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>RoomType</th>
+            <th>Space</th>
+            <th>City</th>
+            <th>Section</th>
+            <th>Price</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+       @foreach (var home in Model.Properties)
+       {
+        <tr>
+            <th>
+                @home.Title
+            </th>
+            <th>
+                @home.Description
+            </th>
+            <th>
+                @home.RoomType
+            </th>
+            <th>
+                @home.Space
+            </th>
+            <th>
+                @home.CityName
+            </th>
+            <th>
+                @home.SectionName
+            </th>
+            <th>
+                @home.Price
+            </th>
+            <th></th>
+        </tr>
+       }
+    </tbody>
+</table>
+
