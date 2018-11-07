@@ -1,7 +1,69 @@
-﻿
+﻿@model PropertyFormViewModel
 @{
-    ViewData["Title"] = "Add";
+    ViewData["Title"] = "Add Home";
 }
 
-<h2>Add</h2>
+<h2>@ViewData["Title"]</h2>
 
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Space"></label>
+                <input asp-for="Space" class="form-control" />
+                <span asp-validation-for="Space" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RoomType"></label>
+                <select asp-for="RoomType" asp-items="Html.GetEnumSelectList<RoomType>()" class="form-control"></select>
+                <span asp-validation-for="RoomType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CityId"></label>
+                <select asp-for="CityId" asp-items="Model.Cities" class="form-control" onchange="FillLocations()"></select>
+                <span asp-validation-for="CityId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LocationId"></label>
+                <select asp-for="LocationId" asp-items="Model.Locations" class="form-control"></select>
+                <span asp-validation-for="LocationId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsForRent"></label>
+                <input asp-for="IsForRent" class="form-control" />
+                <span asp-validation-for="IsForRent" class="text-danger"></span>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#CityId").change(function () {
+            $.ajax({
+                type: "POST",
+                url: 'Location/GetAllSectionsByCityId',
+                data: { id: $("#CityId").val() },
+                success: {
+                }
+            })
+        }
+        )
+    });
+</script>

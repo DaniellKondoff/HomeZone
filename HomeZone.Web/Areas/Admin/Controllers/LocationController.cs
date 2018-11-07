@@ -153,5 +153,18 @@ namespace HomeZone.Web.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(ListSections), new { id=model.Cityid });
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetLocationsByCityId(int id)
+        {
+            var locations = await this.locationService.GetAllSectionByCity(id);
+
+            if (locations == null)
+            {
+                return NotFound();
+            }
+
+            return this.Ok(locations);
+        }
     }
 }

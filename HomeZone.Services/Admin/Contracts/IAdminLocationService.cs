@@ -25,5 +25,8 @@ namespace HomeZone.Services.Admin.Contracts
 
         Task<bool> DeleteSectionAssync(int sectionId, int ityId);
         Task<string> GetCityNameAsync(int id);
+
+        Task<IEnumerable<AdminLocationListingBasicServiceModel>> GetAllCitiesBasicAsync();
+        Task<IEnumerable<AdminSectionListingBasicModel>> GetAllSectionByCity(int cityId);
     }
 }

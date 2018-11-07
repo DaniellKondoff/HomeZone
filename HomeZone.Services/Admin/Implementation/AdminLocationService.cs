@@ -129,5 +129,20 @@ namespace HomeZone.Services.Admin.Implementation
 
             return city?.Name;
         }
+
+        public async Task<IEnumerable<AdminLocationListingBasicServiceModel>> GetAllCitiesBasicAsync()
+        {
+            return await this.db.Cities
+                .ProjectTo<AdminLocationListingBasicServiceModel>()
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<AdminSectionListingBasicModel>> GetAllSectionByCity(int cityId)
+        {
+            return await this.db.Sections
+                 .Where(s => s.CityId == cityId)
+                 .ProjectTo<AdminSectionListingBasicModel>()
+                 .ToListAsync();
+        }
     }
 }
