@@ -25,28 +25,31 @@
        @foreach (var home in Model.Properties)
        {
         <tr>
-            <th>
+            <td>
                 @home.Title
-            </th>
-            <th>
+            </td>
+            <td>
                 @home.Description
-            </th>
-            <th>
+            </td>
+            <td>
                 @home.RoomType
-            </th>
-            <th>
+            </td>
+            <td>
                 @home.Space
-            </th>
-            <th>
+            </td>
+            <td>
                 @home.CityName
-            </th>
-            <th>
+            </td>
+            <td>
                 @home.SectionName
-            </th>
-            <th>
+            </td>
+            <td>
                 @home.Price
-            </th>
-            <th></th>
+            </td>
+            <td>
+                <a class="btn btn-warning" asp-action="Edit" asp-route-id="@home.Id">Edit</a>
+                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@home.Id">Delete</a>
+            </td>
         </tr>
        }
     </tbody>
