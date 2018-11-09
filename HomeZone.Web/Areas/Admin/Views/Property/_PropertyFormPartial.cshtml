@@ -46,3 +46,26 @@
     </div>
     <button type="submit" class="btn btn-default">Save</button>
 </form>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+    $('#CityId').on("change", function () {
+        var selectedCityId = $('#CityId').val();
+        console.log(selectedCityId);
+        $.ajax({
+            url: '/id/',
+            type: "GET",
+            dataType: "JSON",
+            data: { cityId: selectedCityId },
+            success: function (locations) {
+                $("#LocationId").empty();
+                $.each(locations, function (i, location) {
+                    $('#LocationId').append(
+                        $('<option></option>').val(location.id).html(location.name));
+                });
+            }
+        });
+    });
+</script>

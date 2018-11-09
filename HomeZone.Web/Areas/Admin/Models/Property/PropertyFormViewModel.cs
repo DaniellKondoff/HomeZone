@@ -34,7 +34,7 @@ namespace HomeZone.Web.Areas.Admin.Models.Property
         public IEnumerable<SelectListItem> Cities { get; set; }
 
         [Display(Name = "Location")]
-        public int? LocationId { get; set; }
+        public int LocationId { get; set; }
 
         public IEnumerable<SelectListItem> Locations { get; set; }
 

@@ -20,7 +20,7 @@ namespace HomeZone.Services.Admin.Implementation
             this.db = db;
         }
 
-        public async Task CreateAsync(string title, string description, decimal price, int space, RoomType roomType, bool isForRent, int cityId)
+        public async Task CreateAsync(string title, string description, decimal price, int space, RoomType roomType, bool isForRent, int cityId, int locationId)
         {
             var property = new Property
             {
@@ -31,7 +31,7 @@ namespace HomeZone.Services.Admin.Implementation
                 RoomType = roomType,
                 IsForRent = isForRent,
                 CityId = cityId,
-                SectionId = 2
+                SectionId = locationId
             };
 
             await this.db.Properties.AddAsync(property);
@@ -39,7 +39,7 @@ namespace HomeZone.Services.Admin.Implementation
         }
 
         public async Task<bool> EditAsync(int id, string title, string description, decimal price, int space, RoomType roomType, 
-            bool isForRent, int cityId)
+            bool isForRent, int cityId, int locationId)
         {
             var property = await this.db.Properties
                 .FindAsync(id);
@@ -56,6 +56,7 @@ namespace HomeZone.Services.Admin.Implementation
             property.RoomType = roomType;
             property.IsForRent = isForRent;
             property.CityId = cityId;
+            property.SectionId = locationId;
 
             this.db.Properties.Update(property);
             await this.db.SaveChangesAsync();

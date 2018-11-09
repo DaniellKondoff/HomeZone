@@ -155,9 +155,9 @@ namespace HomeZone.Web.Areas.Admin.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetLocationsByCityId(int id)
+        public async Task<IActionResult> GetLocationsByCityId(int cityId)
         {
-            var locations = await this.locationService.GetAllSectionByCity(id);
+            var locations = await this.locationService.GetAllSectionByCity(cityId);
 
             if (locations == null)
             {

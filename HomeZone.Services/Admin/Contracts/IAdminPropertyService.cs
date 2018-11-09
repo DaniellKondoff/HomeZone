@@ -11,12 +11,12 @@ namespace HomeZone.Services.Admin.Contracts
 
         bool IsRoomTypeExists(int roomType);
 
-        Task CreateAsync(string title, string description, decimal price, int space, RoomType roomType, bool isForRent, int cityId);
+        Task CreateAsync(string title, string description, decimal price, int space, RoomType roomType, bool isForRent, int cityId, int locationId);
 
         Task<AdminPropertyBaseServiceModel> GetByIdAsync(int id);
 
         Task<bool> ExistAsync(int id);
 
-        Task<bool> EditAsync(int id, string title, string description, decimal price, int space, RoomType roomType, bool isForRent, int cityId);
+        Task<bool> EditAsync(int id, string title, string description, decimal price, int space, RoomType roomType, bool isForRent, int cityId, int locationId);
     }
 }

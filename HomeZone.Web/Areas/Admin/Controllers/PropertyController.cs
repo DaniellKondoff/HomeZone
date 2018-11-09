@@ -72,7 +72,8 @@ namespace HomeZone.Web.Areas.Admin.Controllers
                                      model.Space,
                                      model.RoomType,
                                      model.IsForRent,
-                                     model.CityId);
+                                     model.CityId,
+                                     model.LocationId);
 
 
             TempData.AddSuccessMessage($"The Home {model.Title} has been created succesfully");
@@ -143,7 +144,8 @@ namespace HomeZone.Web.Areas.Admin.Controllers
                           model.Space,
                           model.RoomType,
                           model.IsForRent,
-                          model.CityId);
+                          model.CityId,
+                          model.LocationId);
 
             if (!success)
             {
