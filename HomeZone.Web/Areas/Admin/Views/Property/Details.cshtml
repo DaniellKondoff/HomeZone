@@ -1,0 +1,79 @@
+﻿@model AdminPropertyDetailsServiceModel
+@{
+    ViewData["Title"] = $"{Model.Title} Details";
+}
+
+<h2>Details</h2>
+<div>
+    <h4>@ViewData["Title"]</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RoomType)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RoomType)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Space)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Space)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Price) $
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Price) $
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CityName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CityName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SectionName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SectionName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IsForRent)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IsForRent)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IsSold)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IsSold)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.MainImage)
+        </dt>
+        <dd>
+            <img width="200" src="data:image/png;base64,@(Model.MainImage != null ? Convert.ToBase64String(Model.MainImage) : string.Empty)" alt="@Model.Title" />
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SecondaryImage)
+        </dt>
+        <dd>
+            <img width="200" src="data:image/png;base64,@(Model.SecondaryImage != null ? Convert.ToBase64String(Model.SecondaryImage) : string.Empty)" alt="@Model.Title" />
+        </dd>
+    </dl>
+</div>
+

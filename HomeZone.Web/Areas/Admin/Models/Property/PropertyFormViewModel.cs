@@ -1,4 +1,5 @@
 ﻿using HomeZone.Data.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -40,5 +41,11 @@ namespace HomeZone.Web.Areas.Admin.Models.Property
 
 
         public bool IsForRent { get; set; }
+
+        [Required]
+        public IFormFile HomeImage { get; set; }
+
+        public IFormFile HomeSecondaryImage { get; set; }
+
     }
 }

@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using HomeZone.Data.Models;
 using System;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace HomeZone.Services.Admin.Implementation
 {
@@ -20,7 +22,7 @@ namespace HomeZone.Services.Admin.Implementation
             this.db = db;
         }
 
-        public async Task CreateAsync(string title, string description, decimal price, int space, RoomType roomType, bool isForRent, int cityId, int locationId)
+        public async Task CreateAsync(string title, string description, decimal price, int space, RoomType roomType, bool isForRent, int cityId, int locationId, IFormFile homeImage, IFormFile homeSecondaryFile)
         {
             var property = new Property
             {
@@ -31,15 +33,40 @@ namespace HomeZone.Services.Admin.Implementation
                 RoomType = roomType,
                 IsForRent = isForRent,
                 CityId = cityId,
-                SectionId = locationId
+                SectionId = locationId,
+                MainImage = await ConvertByteArrFromIFormFile(homeImage),
+                SecondaryImage = await ConvertByteArrFromIFormFile(homeSecondaryFile)
             };
 
             await this.db.Properties.AddAsync(property);
             await this.db.SaveChangesAsync();
         }
 
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var property = await this.db.Properties.FindAsync(id);
+
+            if (property == null)
+            {
+                return false;
+            }
+
+            this.db.Properties.Remove(property);
+            await this.db.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<AdminPropertyDetailsServiceModel> DetailsAsync(int id)
+        {
+            return await this.db.Properties
+                .Where(p => p.Id == id)
+                .ProjectTo<AdminPropertyDetailsServiceModel>()
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<bool> EditAsync(int id, string title, string description, decimal price, int space, RoomType roomType, 
-            bool isForRent, int cityId, int locationId)
+            bool isForRent, int cityId, int locationId, IFormFile homeImage, IFormFile homeSecondaryImage)
         {
             var property = await this.db.Properties
                 .FindAsync(id);
@@ -57,6 +84,16 @@ namespace HomeZone.Services.Admin.Implementation
             property.IsForRent = isForRent;
             property.CityId = cityId;
             property.SectionId = locationId;
+
+            if (homeImage != null)
+            {
+                property.MainImage = await this.ConvertByteArrFromIFormFile(homeImage);
+            }
+
+            if (homeSecondaryImage != null)
+            {
+                property.SecondaryImage = await this.ConvertByteArrFromIFormFile(homeSecondaryImage);
+            }
 
             this.db.Properties.Update(property);
             await this.db.SaveChangesAsync();
@@ -91,5 +128,25 @@ namespace HomeZone.Services.Admin.Implementation
                  .ProjectTo<AdminPropertyListinServiceModel>()
                  .ToListAsync();
         }
+
+        private async Task<byte[]> ConvertByteArrFromIFormFile(IFormFile file)
+        {
+            byte[] fileArr;
+
+            if (file != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await file.CopyToAsync(memoryStream);
+                    fileArr = memoryStream.ToArray();
+                }
+            }
+            else
+            {
+                fileArr = new byte[0];
+            }
+
+            return fileArr;
+        } 
     }
 }

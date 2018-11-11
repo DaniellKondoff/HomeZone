@@ -3,7 +3,9 @@ using HomeZone.Web.Areas.Admin.Models.Property;
 using HomeZone.Web.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -34,9 +36,13 @@ namespace HomeZone.Web.Areas.Admin.Controllers
 
         public async Task<IActionResult> Add()
         {
+            var cities = await this.GetCitiesAsync();
+            var locations = await GetLocationsAsync();
+
             return View(new PropertyFormViewModel
             {
-                Cities = await this.GetCitiesAsync()
+                Cities = cities,
+                Locations = locations
             });
         }
 
@@ -57,11 +63,22 @@ namespace HomeZone.Web.Areas.Admin.Controllers
                 ModelState.AddModelError(nameof(model.CityId), "Please select a valid City");
             }
 
+            bool isCityContainsSection = await this.locationService.ContainsSectionAsync(model.CityId, model.LocationId);
+
+            if (!isCityContainsSection)
+            {
+                ModelState.AddModelError(nameof(model.LocationId), "That Location is not part of the selected city");
+            }
+
             if (!ModelState.IsValid)
             {
+                var cities = await this.GetCitiesAsync();
+                var locations = await GetLocationsAsync();
+
                 return View(new PropertyFormViewModel
                 {
-                    Cities = await this.GetCitiesAsync()
+                    Cities = cities,
+                    Locations = locations
                 });
             }
 
@@ -73,7 +90,9 @@ namespace HomeZone.Web.Areas.Admin.Controllers
                                      model.RoomType,
                                      model.IsForRent,
                                      model.CityId,
-                                     model.LocationId);
+                                     model.LocationId,
+                                     model.HomeImage,
+                                     model.HomeSecondaryImage);
 
 
             TempData.AddSuccessMessage($"The Home {model.Title} has been created succesfully");
@@ -96,10 +115,12 @@ namespace HomeZone.Web.Areas.Admin.Controllers
                 Description = model.Description,
                 Price = model.Price,
                 CityId = model.CityId,
+                LocationId = model.SectionId,
                 Space = model.Space,
                 IsForRent = model.IsForRent,
                 RoomType = model.RoomType,
-                Cities = await this.GetCitiesAsync()
+                Cities = await this.GetCitiesAsync(),
+                Locations = await GetLocationsAsyncByCityId(model.CityId)
             });
         }
 
@@ -127,11 +148,19 @@ namespace HomeZone.Web.Areas.Admin.Controllers
                 ModelState.AddModelError(nameof(model.CityId), "Please select a valid City");
             }
 
+            bool isCityContainsSection = await this.locationService.ContainsSectionAsync(model.CityId, model.LocationId);
+
+            if (!isCityContainsSection)
+            {
+                ModelState.AddModelError(nameof(model.LocationId), "That Location is not part of the selected city");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(new PropertyFormViewModel
                 {
-                    Cities = await this.GetCitiesAsync()
+                    Cities = await this.GetCitiesAsync(),
+                    Locations = await this.GetLocationsAsyncByCityId(model.CityId)
                 });
             }
 
@@ -145,7 +174,9 @@ namespace HomeZone.Web.Areas.Admin.Controllers
                           model.RoomType,
                           model.IsForRent,
                           model.CityId,
-                          model.LocationId);
+                          model.LocationId,
+                          model.HomeImage,
+                          model.HomeSecondaryImage);
 
             if (!success)
             {
@@ -157,6 +188,39 @@ namespace HomeZone.Web.Areas.Admin.Controllers
             }
 
             return RedirectToAction(nameof(ListAll));
+        }
+
+        public IActionResult Delete(int id)
+        {
+            return View(id);
+        }
+
+        public async Task<IActionResult> Destroy(int id)
+        {
+            bool success = await this.propertyServce.DeleteAsync(id);
+
+            if (!success)
+            {
+                TempData.AddErrorMessage("Invalid Request");
+            }
+            else
+            {
+                TempData.AddSuccessMessage("Property has been deleted successfully");
+            }
+
+            return RedirectToAction(nameof(ListAll));
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var property = await this.propertyServce.DetailsAsync(id);
+
+            if (property == null)
+            {
+                return BadRequest();
+            }
+            
+            return View(property);
         }
 
         private async Task<IEnumerable<SelectListItem>> GetCitiesAsync()
@@ -172,6 +236,36 @@ namespace HomeZone.Web.Areas.Admin.Controllers
                 .ToList();
 
             return citiesListItems;
+        }
+
+        private async Task<IEnumerable<SelectListItem>> GetLocationsAsync()
+        {
+            var locations = await this.locationService.GetAllSectionByFirstCity();
+
+            var locationListItems = locations
+                .Select(l => new SelectListItem
+                {
+                    Text = l.Name,
+                    Value = l.Id.ToString()
+                })
+                .ToList();
+
+            return locationListItems;
+        }
+
+        private async Task<IEnumerable<SelectListItem>> GetLocationsAsyncByCityId(int id)
+        {
+            var locations = await this.locationService.GetAllSectionByCity(id);
+
+            var locationListItems = locations
+                .Select(l => new SelectListItem
+                {
+                    Text = l.Name,
+                    Value = l.Id.ToString()
+                })
+                .ToList();
+
+            return locationListItems;
         }
 
     }

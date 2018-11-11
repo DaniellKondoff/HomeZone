@@ -25,5 +25,9 @@
         public int SectionId { get; set; }
 
         public Section Section { get; set; }
+
+        public byte[] MainImage { get; set; }
+
+        public byte[] SecondaryImage { get; set; }
     }
 }

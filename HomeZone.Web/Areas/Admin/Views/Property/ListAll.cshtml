@@ -12,7 +12,7 @@
     <thead>
         <tr>
             <th>Title</th>
-            <th>Description</th>
+            <th>Picture</th>
             <th>RoomType</th>
             <th>Space</th>
             <th>City</th>
@@ -22,14 +22,14 @@
         </tr>
     </thead>
     <tbody>
-       @foreach (var home in Model.Properties)
-       {
+        @foreach (var home in Model.Properties)
+        {
         <tr>
             <td>
-                @home.Title
+                <a asp-action="Details" asp-route-id="@home.Id">@home.Title</a>
             </td>
             <td>
-                @home.Description
+                <img width="200" src="data:image/png;base64,@(home.MainImage != null ? Convert.ToBase64String(home.MainImage) : string.Empty)" alt="@home.Title" />
             </td>
             <td>
                 @home.RoomType
@@ -51,7 +51,7 @@
                 <a class="btn btn-danger" asp-action="Delete" asp-route-id="@home.Id">Delete</a>
             </td>
         </tr>
-       }
+        }
     </tbody>
 </table>
 

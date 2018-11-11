@@ -4,13 +4,15 @@ using HomeZone.Data.Models;
 
 namespace HomeZone.Services.Admin.Models.Properties
 {
-    public class AdminPropertyListinServiceModel : IMapFrom<Property>, IHaveCustomMapping
+    public class AdminPropertyDetailsServiceModel : IMapFrom<Property>, IHaveCustomMapping
     {
-        public int Id { get; set; }
-
         public string Title { get; set; }
 
-        public byte[] MainImage { get; set; }
+        public string Description { get; set; }
+
+        public bool IsSold { get; set; }
+
+        public bool IsForRent { get; set; }
 
         public decimal Price { get; set; }
 
@@ -21,6 +23,10 @@ namespace HomeZone.Services.Admin.Models.Properties
         public string CityName { get; set; }
 
         public string SectionName { get; set; }
+
+        public byte[] MainImage { get; set; }
+
+        public byte[] SecondaryImage { get; set; }
 
         public void ConfigureMapping(Profile mapper)
         {

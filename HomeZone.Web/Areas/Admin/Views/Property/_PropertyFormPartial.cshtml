@@ -1,5 +1,5 @@
 ﻿@model PropertyFormViewModel
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="form-group">
         <label asp-for="Title"></label>
@@ -44,6 +44,16 @@
             </label>
         </div>
     </div>
+    <div class="form-group">
+        <label asp-for="HomeImage"></label>
+        <input asp-for="HomeImage" type="file" class="form-control" />
+        <span asp-validation-for="HomeImage" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="HomeSecondaryImage"></label>
+        <input asp-for="HomeSecondaryImage" type="file" class="form-control" />
+        <span asp-validation-for="HomeSecondaryImage" class="text-danger"></span>
+    </div>
     <button type="submit" class="btn btn-default">Save</button>
 </form>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -53,12 +63,10 @@
 <script type="text/javascript">
     $('#CityId').on("change", function () {
         var selectedCityId = $('#CityId').val();
-        console.log(selectedCityId);
         $.ajax({
-            url: '/id/',
+            url: '/api/location/ByCityId/' + selectedCityId,
             type: "GET",
             dataType: "JSON",
-            data: { cityId: selectedCityId },
             success: function (locations) {
                 $("#LocationId").empty();
                 $.each(locations, function (i, location) {

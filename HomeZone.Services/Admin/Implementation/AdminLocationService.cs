@@ -144,5 +144,21 @@ namespace HomeZone.Services.Admin.Implementation
                  .ProjectTo<AdminSectionListingBasicModel>()
                  .ToListAsync();
         }
+
+        public async Task<bool> ContainsSectionAsync(int cityId, int locationId)
+        {
+            return await this.db.Sections
+                 .AnyAsync(s => s.CityId == cityId && s.Id == locationId);
+        }
+
+        public async Task<IEnumerable<AdminSectionListingBasicModel>> GetAllSectionByFirstCity()
+        {
+            var city = await this.db.Cities.FirstAsync();
+
+            return await this.db.Sections
+                  .Where(s => s.CityId == city.Id)
+                  .ProjectTo<AdminSectionListingBasicModel>()
+                  .ToListAsync();
+        }
     }
 }
