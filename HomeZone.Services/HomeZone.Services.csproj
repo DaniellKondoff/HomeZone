@@ -13,10 +13,4 @@
     <ProjectReference Include="..\HomeZone.Data\HomeZone.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Contracts\" />
-    <Folder Include="Implementation\" />
-    <Folder Include="Models\" />
-  </ItemGroup>
-
 </Project>
