@@ -1,4 +1,6 @@
-﻿namespace HomeZone.Data.Models
+﻿using System.Collections.Generic;
+
+namespace HomeZone.Data.Models
 {
     public class Property
     {
@@ -29,5 +31,7 @@
         public byte[] MainImage { get; set; }
 
         public byte[] SecondaryImage { get; set; }
+
+        public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
     }
 }

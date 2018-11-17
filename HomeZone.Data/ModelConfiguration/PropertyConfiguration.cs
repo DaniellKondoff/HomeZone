@@ -18,6 +18,12 @@ namespace HomeZone.Data.ModelConfiguration
                 .WithMany(s => s.Properties)
                 .HasForeignKey(p => p.SectionId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .HasMany(p => p.Reservations)
+                .WithOne(r => r.Property)
+                .HasForeignKey(r => r.PropertyId)
+                .OnDelete(DeleteBehavior.Restrict);   
         }
     }
 }
