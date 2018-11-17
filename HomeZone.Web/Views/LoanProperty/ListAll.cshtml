@@ -1,0 +1,11 @@
+﻿@model IEnumerable<ListingPropertyServiceModel>
+@{
+    ViewData["Title"] = "All Homes";
+}
+
+<h2>
+    @ViewData["Title"]
+</h2>
+
+@Html.Partial("_PartialListAll", Model)
+

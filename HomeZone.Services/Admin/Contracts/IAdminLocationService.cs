@@ -27,8 +27,11 @@ namespace HomeZone.Services.Admin.Contracts
         Task<string> GetCityNameAsync(int id);
 
         Task<IEnumerable<AdminLocationListingBasicServiceModel>> GetAllCitiesBasicAsync();
+
         Task<IEnumerable<AdminSectionListingBasicModel>> GetAllSectionByCity(int cityId);
+
         Task<IEnumerable<AdminSectionListingBasicModel>> GetAllSectionByFirstCity();
+
         Task<bool> ContainsSectionAsync(int cityId, int locationId);
     }
 }

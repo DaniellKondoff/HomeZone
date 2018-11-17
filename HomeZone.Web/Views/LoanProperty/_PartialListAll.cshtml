@@ -1,0 +1,43 @@
+﻿@model IEnumerable<ListingPropertyServiceModel>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Picture</th>
+            <th>Title</th>
+            <th>RoomType</th>
+            <th>Space</th>
+            <th>City</th>
+            <th>Section</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var home in Model)
+        {
+            <tr>
+                <td>
+                    <img width="200" src="data:image/png;base64,@(home.MainImage != null ? Convert.ToBase64String(home.MainImage) : string.Empty)" alt="@home.Title" />
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@home.Id">@home.Title</a>
+                </td>
+                <td>
+                    @home.RoomType
+                </td>
+                <td>
+                    @home.Space
+                </td>
+                <td>
+                    @home.CityName
+                </td>
+                <td>
+                    @home.SectionName
+                </td>
+                <td>
+                    @home.Price
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

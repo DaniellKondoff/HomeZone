@@ -1,0 +1,28 @@
+﻿@model HomeZone.Services.Models.LoanProperties.PropertyDetailsServiceModel
+@{
+    ViewData["Title"] = $"{Model.Title} Details";
+}
+
+<h2>
+    @ViewData["Title"]
+</h2>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="col-lg-12">
+            <p><label asp-for="@Model.Title"></label>: @Model.Title</p>
+            <p><label asp-for="@Model.Description"></label>: @Model.Description</p>
+            <p><label asp-for="@Model.RoomType"></label>: @Model.RoomType</p>
+            <p><label asp-for="@Model.Space"></label>: @Model.Space</p>
+            <p><label asp-for="@Model.Price"></label>: @Model.Price $</p>
+            <p><label asp-for="@Model.CityName"></label>: @Model.CityName</p>
+            <p><label asp-for="@Model.SectionName"></label>: @Model.SectionName</p>
+            <br />
+            <br />
+            <img width="400" height="200" src="data:image/png;base64,@(Model.MainImage != null ? Convert.ToBase64String(Model.MainImage) : string.Empty)" alt="@Model.Title" />
+            <br />
+            <br />
+            <img width="400" height="200" src="data:image/png;base64,@(Model.SecondaryImage != null ? Convert.ToBase64String(Model.SecondaryImage) : string.Empty)" alt="@Model.Title" />
+        </div>
+    </div>
+</div>
+
