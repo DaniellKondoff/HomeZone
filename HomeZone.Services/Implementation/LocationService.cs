@@ -38,7 +38,7 @@ namespace HomeZone.Services.Implementation
         public async Task<IEnumerable<ListingBasicSectionServiceModel>> GetAllSectionByDefault()
         {
             var city = await this.db.Cities.FirstAsync();
-
+            
             return await this.db.Sections
                 .Where(s => s.CityId == city.Id)
                 .OrderBy(s => s.Name)

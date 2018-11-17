@@ -10,6 +10,7 @@
             <th>City</th>
             <th>Section</th>
             <th>Price</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -36,6 +37,9 @@
                 </td>
                 <td>
                     @home.Price
+                </td>
+                <td>
+                    <a class="btn btn-primary" asp-action="Reserve" asp-route-id="@home.Id">Reserve</a>
                 </td>
             </tr>
         }

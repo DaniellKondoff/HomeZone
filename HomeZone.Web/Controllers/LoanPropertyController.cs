@@ -1,7 +1,9 @@
 ﻿using HomeZone.Services.Contracts;
+using HomeZone.Web.Infrastructure.Extensions;
 using HomeZone.Web.Models.LoanPropertyViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,11 +14,13 @@ namespace HomeZone.Web.Controllers
     {
         private readonly ILoanPropertyService loanService;
         private readonly ILocationService locationService;
+        private readonly IReservetionService reservationService;
 
-        public LoanPropertyController(ILoanPropertyService loanService, ILocationService locationService)
+        public LoanPropertyController(ILoanPropertyService loanService, ILocationService locationService, IReservetionService reservationService)
         {
             this.loanService = loanService;
             this.locationService = locationService;
+            this.reservationService = reservationService;
         }
 
         public async Task<IActionResult> ListAll()
@@ -61,6 +65,41 @@ namespace HomeZone.Web.Controllers
             }
 
             return View(searchedHome);
+        }
+
+        public IActionResult Reserve(int id)
+        {
+            return View(new ReserveViewModel
+            {
+                Id = id,
+                StartDate = DateTime.UtcNow,
+                EndDate = DateTime.UtcNow.AddMonths(1)
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Reserve(ReserveViewModel model)
+        {
+            bool isReserved = await this.reservationService.IsReservedAsync(model.Id, model.StartDate, model.EndDate);
+
+            if (isReserved)
+            {
+                TempData.AddErrorMessage("There is already reservation for that time period.Please choose another dates.");
+                return RedirectToAction(nameof(Reserve));
+            }
+
+            bool success = await this.reservationService.MakeReservationsAsync(model.Id, model.StartDate, model.EndDate);
+
+            if (!success)
+            {
+                TempData.AddErrorMessage("Invalid Request");
+            }
+            else
+            {
+                TempData.AddSuccessMessage("Your reservation has been cofnirmed");
+            }
+
+            return RedirectToAction(nameof(ListAll));
         }
 
         private async Task<IEnumerable<SelectListItem>> GetCitiesAsync()

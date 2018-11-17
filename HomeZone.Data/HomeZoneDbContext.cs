@@ -13,6 +13,8 @@ namespace HomeZone.Data
 
         public DbSet<Section> Sections { get; set; }
 
+        public DbSet<Reservation> Reservetions { get; set; }
+
         public HomeZoneDbContext(DbContextOptions<HomeZoneDbContext> options)
             : base(options)
         {
