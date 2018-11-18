@@ -13,5 +13,9 @@ namespace HomeZone.Data.Models
         public Property Property { get; set; }
 
         public int PropertyId { get; set; }
+
+        public User User { get; set; }
+
+        public string UserId { get; set; }
     }
 }

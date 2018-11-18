@@ -1,6 +1,9 @@
-﻿using HomeZone.Services.Contracts;
+﻿using HomeZone.Data.Models;
+using HomeZone.Services.Contracts;
 using HomeZone.Web.Infrastructure.Extensions;
 using HomeZone.Web.Models.LoanPropertyViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -15,12 +18,18 @@ namespace HomeZone.Web.Controllers
         private readonly ILoanPropertyService loanService;
         private readonly ILocationService locationService;
         private readonly IReservetionService reservationService;
+        private readonly UserManager<User> _userManager;
 
-        public LoanPropertyController(ILoanPropertyService loanService, ILocationService locationService, IReservetionService reservationService)
+        public LoanPropertyController(
+            ILoanPropertyService loanService, 
+            ILocationService locationService, 
+            IReservetionService reservationService,
+             UserManager<User> userManager)
         {
             this.loanService = loanService;
             this.locationService = locationService;
             this.reservationService = reservationService;
+            this._userManager = userManager;
         }
 
         public async Task<IActionResult> ListAll()
@@ -67,6 +76,7 @@ namespace HomeZone.Web.Controllers
             return View(searchedHome);
         }
 
+        [Authorize]
         public IActionResult Reserve(int id)
         {
             return View(new ReserveViewModel
@@ -78,17 +88,20 @@ namespace HomeZone.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Reserve(ReserveViewModel model)
         {
             bool isReserved = await this.reservationService.IsReservedAsync(model.Id, model.StartDate, model.EndDate);
-
+            
             if (isReserved)
             {
                 TempData.AddErrorMessage("There is already reservation for that time period.Please choose another dates.");
                 return RedirectToAction(nameof(Reserve));
             }
 
-            bool success = await this.reservationService.MakeReservationsAsync(model.Id, model.StartDate, model.EndDate);
+            var userId = this._userManager.GetUserId(User);
+
+            bool success = await this.reservationService.MakeReservationsAsync(model.Id, model.StartDate, model.EndDate, userId);
 
             if (!success)
             {
@@ -99,7 +112,33 @@ namespace HomeZone.Web.Controllers
                 TempData.AddSuccessMessage("Your reservation has been cofnirmed");
             }
 
-            return RedirectToAction(nameof(ListAll));
+            return RedirectToAction(nameof(ReservationByUser));
+        }
+
+        [Authorize]
+        public async Task<IActionResult> ReservationByUser()
+        {
+            var userId =  this._userManager.GetUserId(User);
+
+            var reservationList = await this.reservationService.ReservationsByUserIdAsync(userId);
+
+            return View(reservationList);
+        }
+
+        public async Task<IActionResult> CancelReservation(int id)
+        {
+            bool success = await this.reservationService.DeleteAsync(id);
+
+            if (!success)
+            {
+                TempData.AddErrorMessage("Invalid Request");
+            }
+            else
+            {
+                TempData.AddSuccessMessage("Your reservations has been removed.");
+            }
+
+            return RedirectToAction(nameof(ReservationByUser));
         }
 
         private async Task<IEnumerable<SelectListItem>> GetCitiesAsync()

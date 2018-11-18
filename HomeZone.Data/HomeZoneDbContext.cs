@@ -15,6 +15,7 @@ namespace HomeZone.Data
 
         public DbSet<Reservation> Reservetions { get; set; }
 
+
         public HomeZoneDbContext(DbContextOptions<HomeZoneDbContext> options)
             : base(options)
         {
@@ -24,6 +25,7 @@ namespace HomeZone.Data
         {
             builder.ApplyConfiguration(new PropertyConfiguration());
             builder.ApplyConfiguration(new CityConfiguration());
+            builder.ApplyConfiguration(new ReservationCinfiguration());
 
             base.OnModelCreating(builder);
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using static HomeZone.Data.DataConstants;
 
@@ -15,5 +16,7 @@ namespace HomeZone.Data.Models
         [MaxLength(UserLastNameMaxLength)]
         [MinLength(UserLastNameMinLength)]
         public string LastName { get; set; }
+
+        public ICollection<Reservation> Reservations { get; set; }
     }
 }
