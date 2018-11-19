@@ -1,5 +1,6 @@
 ﻿using AutoMapper.QueryableExtensions;
 using HomeZone.Data;
+using HomeZone.Data.Models;
 using HomeZone.Services.Contracts;
 using HomeZone.Services.Models.SoldingProperties;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +33,14 @@ namespace HomeZone.Services.Implementation
                 .Where(p => p.Id == id)
                 .ProjectTo<PropertyDetailsServiceModel>()
                 .FirstAsync();
+        }
+
+        public async Task<IEnumerable<PropertyListingServiceModel>> SearchedAllAsync(int cityId, int locationId, RoomType roomType)
+        {
+            return await this.db.Properties
+               .Where(p => p.IsForRent == false && p.CityId == cityId && p.SectionId == locationId && p.RoomType == roomType)
+               .ProjectTo<PropertyListingServiceModel>()
+               .ToListAsync();
         }
     }
 }
