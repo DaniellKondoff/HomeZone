@@ -1,0 +1,10 @@
+﻿@model int
+
+@{
+    ViewData["Title"] = "Buy Property";
+}
+
+<h2>Are you sure you want to buy this Property?</h2>
+
+<a class="btn btn-danger" asp-action="FinishOrder" asp-route-id="@Model">Confirm</a>
+<a class="btn btn-default" asp-action="ListAll">Back</a>

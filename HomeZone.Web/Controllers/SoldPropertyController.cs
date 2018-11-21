@@ -1,6 +1,8 @@
 ﻿using HomeZone.Data.Models;
 using HomeZone.Services.Contracts;
+using HomeZone.Web.Infrastructure.Extensions;
 using HomeZone.Web.Models.SoldPropertyViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -71,6 +73,55 @@ namespace HomeZone.Web.Controllers
             }
 
             return View(searchedHome);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Buy(int id)
+        {
+            bool isExist = await this.soldService.ExistAsync(id);
+
+            if (!isExist)
+            {
+                return BadRequest();
+            }
+
+            return View(id);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> FinishOrder(int id)
+        {
+            bool isBought = await this.soldService.IsBougthAsync(id);
+
+            if (isBought)
+            {
+                TempData.AddErrorMessage("That home has been already bought.");
+            }
+
+            string userId = this.userManager.GetUserId(User);
+
+            bool success = await this.soldService.BuyAsync(userId, id);
+
+            if (!success)
+            {
+                TempData.AddErrorMessage("Invalid Request.");
+            }
+            else
+            {
+                TempData.AddSuccessMessage("You have complete your order successfully");
+            }
+
+            return RedirectToAction(nameof(ListAll));
+        }
+
+        [Authorize]
+        public async Task<IActionResult> MyHomes()
+        {
+            string userId = this.userManager.GetUserId(User);
+
+            var myHomes = await this.soldService.MyHomesListAsync(userId);
+
+            return View(myHomes);
         }
 
         private async Task<IEnumerable<SelectListItem>> GetCitiesAsync()

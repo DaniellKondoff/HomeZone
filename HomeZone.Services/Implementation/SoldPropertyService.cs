@@ -21,9 +21,33 @@ namespace HomeZone.Services.Implementation
         public async Task<IEnumerable<PropertyListingServiceModel>> AllAsync()
         {
             return await this.db.Properties
-               .Where(p => p.IsForRent == false)
+               .Where(p => p.IsForRent == false && p.IsSold == false)
                .ProjectTo<PropertyListingServiceModel>()
                .ToListAsync();
+        }
+
+        public async Task<bool> BuyAsync(string userId, int propertyId)
+        {
+            bool isUserExists = await db.Users.AnyAsync(u => u.Id == userId);
+
+            if (!isUserExists)
+            {
+                return false;
+            }
+
+            var property = await this.db.Properties.FindAsync(propertyId);
+        
+            if (property == null)
+            {
+                return false;
+            }
+
+            property.OwnerId = userId;
+            property.IsSold = true;
+
+            this.db.Properties.Update(property);
+            await this.db.SaveChangesAsync();
+            return true;
         }
 
         public async Task<PropertyDetailsServiceModel> DetailsAsync(int id)
@@ -35,10 +59,30 @@ namespace HomeZone.Services.Implementation
                 .FirstAsync();
         }
 
+        public async Task<bool> ExistAsync(int id)
+        {
+            return await this.db.Properties
+                .AnyAsync(p => p.Id == id);
+        }
+
+        public async Task<bool> IsBougthAsync(int propertyId)
+        {
+            return await this.db.Properties
+                .AnyAsync(p => p.Id == propertyId && p.IsSold == true);
+        }
+
+        public async Task<IEnumerable<SoldPropertyServiceModel>> MyHomesListAsync(string userId)
+        {
+            return await this.db.Properties
+                .Where(p => p.OwnerId == userId && p.IsSold == true)
+                .ProjectTo<SoldPropertyServiceModel>()
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<PropertyListingServiceModel>> SearchedAllAsync(int cityId, int locationId, RoomType roomType)
         {
             return await this.db.Properties
-               .Where(p => p.IsForRent == false && p.CityId == cityId && p.SectionId == locationId && p.RoomType == roomType)
+               .Where(p => p.IsForRent == false && p.CityId == cityId && p.SectionId == locationId && p.RoomType == roomType && p.IsSold == false)
                .ProjectTo<PropertyListingServiceModel>()
                .ToListAsync();
         }

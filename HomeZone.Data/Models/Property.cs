@@ -33,5 +33,9 @@ namespace HomeZone.Data.Models
         public byte[] SecondaryImage { get; set; }
 
         public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
+
+        public string OwnerId { get; set; }
+
+        public User Owner { get; set; }
     }
 }

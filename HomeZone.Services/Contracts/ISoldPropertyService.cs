@@ -12,5 +12,13 @@ namespace HomeZone.Services.Contracts
         Task<PropertyDetailsServiceModel> DetailsAsync(int id);
 
         Task<IEnumerable<PropertyListingServiceModel>> SearchedAllAsync(int cityId, int locationId, RoomType roomType);
+
+        Task<bool> IsBougthAsync(int propertyId);
+
+        Task<bool> BuyAsync(string userId, int propertyId);
+
+        Task<bool> ExistAsync(int id);
+
+        Task<IEnumerable<SoldPropertyServiceModel>> MyHomesListAsync(string userId);
     }
 }

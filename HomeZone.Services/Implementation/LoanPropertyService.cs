@@ -22,7 +22,7 @@ namespace HomeZone.Services.Implementation
         public async Task<IEnumerable<ListingPropertyServiceModel>> AllAsync()
         {
             return await this.db.Properties
-                .Where(p => p.IsForRent == true)
+                .Where(p => p.IsForRent == true && p.IsSold == false)
                 .ProjectTo<ListingPropertyServiceModel>()
                 .ToListAsync();
         }
@@ -38,7 +38,7 @@ namespace HomeZone.Services.Implementation
         public async Task<IEnumerable<ListingPropertyServiceModel>> SearchedAllAsync(int cityId, int locationId, RoomType roomType)
         {
             return await this.db.Properties
-                .Where(p => p.IsForRent == true && p.CityId == cityId && p.SectionId == locationId && p.RoomType == roomType)
+                .Where(p => p.IsForRent == true && p.CityId == cityId && p.SectionId == locationId && p.RoomType == roomType && p.IsSold == false)
                 .ProjectTo<ListingPropertyServiceModel>()
                 .ToListAsync();
         }

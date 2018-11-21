@@ -18,5 +18,7 @@ namespace HomeZone.Data.Models
         public string LastName { get; set; }
 
         public ICollection<Reservation> Reservations { get; set; }
+
+        public ICollection<Property> Properties { get; set; }
     }
 }
