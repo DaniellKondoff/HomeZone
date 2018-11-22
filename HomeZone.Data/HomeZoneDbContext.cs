@@ -15,6 +15,8 @@ namespace HomeZone.Data
 
         public DbSet<Reservation> Reservetions { get; set; }
 
+        public DbSet<Log> Logs { get; set; }
+
 
         public HomeZoneDbContext(DbContextOptions<HomeZoneDbContext> options)
             : base(options)

@@ -1,5 +1,6 @@
 ﻿using HomeZone.Data.Models;
 using HomeZone.Services.Contracts;
+using HomeZone.Web.Infrastructure.Common;
 using HomeZone.Web.Infrastructure.Extensions;
 using HomeZone.Web.Models.SoldPropertyViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -58,13 +59,24 @@ namespace HomeZone.Web.Controllers
             return View(new SearchViewModel
             {
                 Cities = cities,
-                Locations = sections
+                Locations = sections,
+                FromSpaces = this.GetSpaceValues(),
+                ToSpaces = this.GetSpaceValues(),
+                FromPrice = this.GetPriceValues(),
+                ToPrice = this.GetPriceValues()
             });
         }
 
         public async Task<IActionResult> Searched(SearchFormModel model)
         {
-            var searchedHome = await this.soldService.SearchedAllAsync(model.CityId, model.LocationId, model.RoomType);
+            var searchedHome = await this.soldService
+                    .SearchedAllAsync(model.CityId, 
+                                      model.LocationId, 
+                                      model.RoomType,
+                                      model.FromSpaceId,
+                                      model.ToSpaceId,
+                                      model.FromPriceId,
+                                      model.ToPriceId);
 
             //TODO Error Message
             if (searchedHome == null)
@@ -152,6 +164,16 @@ namespace HomeZone.Web.Controllers
                 .ToList();
 
             return locationListItems;
+        }
+
+        private IEnumerable<SelectListItem> GetSpaceValues()
+        {
+            return DropDownListUtility.GetSpaceDropDown();
+        }
+
+        private IEnumerable<SelectListItem> GetPriceValues()
+        {
+            return DropDownListUtility.GetPriceDropDown();
         }
     }
 }

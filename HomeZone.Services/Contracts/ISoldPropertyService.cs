@@ -11,7 +11,8 @@ namespace HomeZone.Services.Contracts
 
         Task<PropertyDetailsServiceModel> DetailsAsync(int id);
 
-        Task<IEnumerable<PropertyListingServiceModel>> SearchedAllAsync(int cityId, int locationId, RoomType roomType);
+        Task<IEnumerable<PropertyListingServiceModel>> SearchedAllAsync(int cityId, int locationId, RoomType roomType, int fromSpaceId, int toSpaceId, 
+            int fromPriceId, int toPriceId);
 
         Task<bool> IsBougthAsync(int propertyId);
 

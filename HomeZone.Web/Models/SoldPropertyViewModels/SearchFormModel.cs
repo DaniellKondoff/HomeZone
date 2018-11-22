@@ -9,5 +9,13 @@ namespace HomeZone.Web.Models.SoldPropertyViewModels
         public int LocationId { get; set; }
 
         public RoomType RoomType { get; set; }
+
+        public int FromSpaceId { get; set; }
+
+        public int ToSpaceId { get; set; }
+
+        public int FromPriceId { get; set; }
+
+        public int ToPriceId { get; set; }
     }
 }

@@ -22,6 +22,26 @@
             <span asp-validation-for="RoomType" class="text-danger"></span>
         </div>
         <div class="form-group">
+            <label asp-for="FromSpaceId"></label>
+            <select asp-for="FromSpaceId" asp-items="Model.FromSpaces" class="form-control"></select>
+            <span asp-validation-for="FromSpaceId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ToSpaceId"></label>
+            <select asp-for="ToSpaceId" asp-items="Model.ToSpaces" class="form-control"></select>
+            <span asp-validation-for="ToSpaceId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="FromPriceId"></label>
+            <select asp-for="FromPriceId" asp-items="Model.FromPrice" class="form-control"></select>
+            <span asp-validation-for="FromPriceId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ToPriceId"></label>
+            <select asp-for="ToPriceId" asp-items="Model.ToPrice" class="form-control"></select>
+            <span asp-validation-for="ToPriceId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
             <input type="submit" class="btn btn-default" value="Search" />
         </div>
     </form>
