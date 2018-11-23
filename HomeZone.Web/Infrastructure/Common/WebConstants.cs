@@ -13,5 +13,10 @@
 
         public const string WithId = "{id}";
         public const string GetLocationsByCityIdRoute = "ByCityId/{id}";
+
+        public const string PropertyTable = "PropertyTable";
+        public const string UserTable = "UserTable";
+        public const string CityTable = "CityTable";
+        public const string LocationTable = "LocationTable";
     }
 }

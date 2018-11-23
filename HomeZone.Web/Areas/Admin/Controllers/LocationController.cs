@@ -1,8 +1,11 @@
-﻿using HomeZone.Services.Admin.Contracts;
+﻿using HomeZone.Data.Enums;
+using HomeZone.Services.Admin.Contracts;
 using HomeZone.Web.Areas.Admin.Models.Location;
 using HomeZone.Web.Infrastructure.Extensions;
+using HomeZone.Web.Infrastructure.Filters;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using static HomeZone.Web.Infrastructure.Common.WebConstants;
 
 namespace HomeZone.Web.Areas.Admin.Controllers
 {
@@ -32,6 +35,7 @@ namespace HomeZone.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Log(Operation.Add, CityTable)]
         public async Task<IActionResult> Create(LocationFormViewModel model)
         {
             bool exist = await this.locationService.ExistAsync(model.Name);
@@ -57,6 +61,7 @@ namespace HomeZone.Web.Areas.Admin.Controllers
             return View(id);
         }
 
+        [Log(Operation.Delete, CityTable)]
         public async Task<IActionResult> Destroy(int id)
         {
             bool success = await this.locationService.DeleteAsync(id);
@@ -104,6 +109,7 @@ namespace HomeZone.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Log(Operation.Add, LocationTable)]
         public async Task<IActionResult> CreateSection(SectionFormViewModel model)
         {
             bool isCityExist = await this.locationService.ExistAsync(model.CityId);
@@ -126,6 +132,7 @@ namespace HomeZone.Web.Areas.Admin.Controllers
             return RedirectToAction(nameof(ListSections), new { id = model.CityId });
         }
 
+        [Log(Operation.Delete, LocationTable)]
         public async Task<IActionResult> DeleteSection(SectionDeleteViewModel model)
         {
             bool isAssigned = await this.locationService.IsAssignedToCity(model.Id, model.Cityid);

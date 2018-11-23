@@ -1,13 +1,14 @@
-﻿using HomeZone.Services.Admin.Contracts;
+﻿using HomeZone.Data.Enums;
+using HomeZone.Services.Admin.Contracts;
 using HomeZone.Web.Areas.Admin.Models.Property;
 using HomeZone.Web.Infrastructure.Extensions;
+using HomeZone.Web.Infrastructure.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using static HomeZone.Web.Infrastructure.Common.WebConstants;
 
 namespace HomeZone.Web.Areas.Admin.Controllers
 {
@@ -47,6 +48,7 @@ namespace HomeZone.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Log(Operation.Add, PropertyTable)]
         public async Task<IActionResult> Add(PropertyFormViewModel model)
         {
             bool isRoomTypeExist = this.propertyServce.IsRoomTypeExists((int)model.RoomType);
@@ -125,6 +127,7 @@ namespace HomeZone.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Log(Operation.Edit, PropertyTable)]
         public async Task<IActionResult> Edit(int id, PropertyFormViewModel model)
         {
             bool IsPropertyExist = await this.propertyServce.ExistAsync(id);
@@ -195,6 +198,7 @@ namespace HomeZone.Web.Areas.Admin.Controllers
             return View(id);
         }
 
+        [Log(Operation.Delete, PropertyTable)]
         public async Task<IActionResult> Destroy(int id)
         {
             bool success = await this.propertyServce.DeleteAsync(id);

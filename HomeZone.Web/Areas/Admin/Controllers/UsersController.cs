@@ -1,7 +1,9 @@
-﻿using HomeZone.Data.Models;
+﻿using HomeZone.Data.Enums;
+using HomeZone.Data.Models;
 using HomeZone.Services.Admin.Contracts;
 using HomeZone.Web.Areas.Admin.Models.Users;
 using HomeZone.Web.Infrastructure.Extensions;
+using HomeZone.Web.Infrastructure.Filters;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -44,6 +46,7 @@ namespace HomeZone.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Log(Operation.Add, UserTable)]
         public async Task<IActionResult> AddToRole(AddUserToRoleFormModel model)
         {
             var roleExist = await this.roleManager.RoleExistsAsync(model.Role);
@@ -67,6 +70,7 @@ namespace HomeZone.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Log(Operation.Delete, UserTable)]
         public async Task<IActionResult> RemoveRole(string UserId)
         {
             var roleExist = await this.roleManager.RoleExistsAsync(AdministratingRole);

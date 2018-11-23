@@ -1,4 +1,5 @@
 ﻿using HomeZone.Data.Enums;
+using HomeZone.Services.Admin.Contracts;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 
@@ -22,9 +23,9 @@ namespace HomeZone.Web.Infrastructure.Filters
         public override void OnActionExecuted(ActionExecutedContext context)
         {
             var userName = context.HttpContext.User.Identity.Name;
-            //var logService = context.HttpContext.RequestServices.GetService<IAdminLogService>();
+            IAdminLogService logService = (IAdminLogService)context.HttpContext.RequestServices.GetService(typeof(IAdminLogService));
 
-            //logService.Create(userName, operationType, tableName, DateTime.UtcNow);
+            logService.Create(userName, operationType, tableName, DateTime.UtcNow);
         }
     }
 }
