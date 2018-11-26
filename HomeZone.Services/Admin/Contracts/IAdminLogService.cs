@@ -1,5 +1,7 @@
 ﻿using HomeZone.Data.Enums;
+using HomeZone.Services.Admin.Models.Logs;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace HomeZone.Services.Admin.Contracts
@@ -12,6 +14,6 @@ namespace HomeZone.Services.Admin.Contracts
 
         Task ClearAsync();
 
-        //Task<IEnumerable<LogsListingServiceModel>> AllListingAsync(int page)
+        Task<IEnumerable<LogsListingServiceModel>> AllListingAsync(int page);
     }
 }

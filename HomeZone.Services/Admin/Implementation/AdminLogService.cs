@@ -1,10 +1,15 @@
-﻿using HomeZone.Data;
+﻿using AutoMapper.QueryableExtensions;
+using HomeZone.Data;
 using HomeZone.Data.Enums;
 using HomeZone.Data.Models;
 using HomeZone.Services.Admin.Contracts;
+using HomeZone.Services.Admin.Models.Logs;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using static HomeZone.Services.ServiceConstants;
 
 namespace HomeZone.Services.Admin.Implementation
 {
@@ -15,6 +20,17 @@ namespace HomeZone.Services.Admin.Implementation
         public AdminLogService(HomeZoneDbContext db)
         {
             this.db = db;
+        }
+
+        public async Task<IEnumerable<LogsListingServiceModel>> AllListingAsync(int page)
+        {
+            return await this.db
+                .Logs
+                .OrderByDescending(a => a.Id)
+                .Skip((page - 1) * AdminLogsListingPageSize)
+                .Take(AdminLogsListingPageSize)
+                .ProjectTo<LogsListingServiceModel>()
+                .ToListAsync();
         }
 
         public async Task ClearAsync()
