@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static HomeZone.Services.ServiceConstants;
 
 namespace HomeZone.Services.Admin.Implementation
 {
@@ -19,9 +20,12 @@ namespace HomeZone.Services.Admin.Implementation
             this.db = db;
         }
 
-        public async Task<IEnumerable<AdminLocationListingServiceModel>> AllAsync()
+        public async Task<IEnumerable<AdminLocationListingServiceModel>> AllAsync(int page)
         {
             return await this.db.Cities
+                    .OrderBy(a => a.Id)
+                    .Skip((page - 1) * AdminLocationListingPageSize)
+                    .Take(AdminLocationListingPageSize)
                     .ProjectTo<AdminLocationListingServiceModel>()
                     .ToListAsync();
         }
@@ -159,6 +163,11 @@ namespace HomeZone.Services.Admin.Implementation
                   .Where(s => s.CityId == city.Id)
                   .ProjectTo<AdminSectionListingBasicModel>()
                   .ToListAsync();
+        }
+
+        public async Task<int> TotalAsync()
+        {
+            return await this.db.Cities.CountAsync();
         }
     }
 }

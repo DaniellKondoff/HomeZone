@@ -5,5 +5,7 @@
         public const string AdministratingRole = "Administrator";
 
         public const int AdminLogsListingPageSize = 10;
+
+        public const int AdminLocationListingPageSize = 3;
     }
 }

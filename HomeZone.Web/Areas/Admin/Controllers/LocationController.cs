@@ -19,13 +19,15 @@ namespace HomeZone.Web.Areas.Admin.Controllers
             this.locationService = locationService;
         }
 
-        public async Task<IActionResult> ListAll()
+        public async Task<IActionResult> ListAll(int page = 1)
         {
-            var allCities = await this.locationService.AllAsync();
+            var allCities = await this.locationService.AllAsync(page);
 
             return View(new LocationListingViewModel
             {
-                AllCities = allCities
+                AllCities = allCities,
+                CurrentPage = page,
+                TotalLocations = await this.locationService.TotalAsync()
             });
         }
 

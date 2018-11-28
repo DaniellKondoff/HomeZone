@@ -6,7 +6,7 @@ namespace HomeZone.Services.Admin.Contracts
 {
     public interface IAdminLocationService
     {
-        Task<IEnumerable<AdminLocationListingServiceModel>> AllAsync();
+        Task<IEnumerable<AdminLocationListingServiceModel>> AllAsync(int page);
 
         Task<bool> ExistAsync(string name);
 
@@ -21,9 +21,11 @@ namespace HomeZone.Services.Admin.Contracts
         Task<bool> IsAssignedToCity(string sectionName, int cityId);
 
         Task AssignedToCity(string sectionName, int cityId);
+
         Task<bool> IsAssignedToCity(int sectionId, int cityId);
 
         Task<bool> DeleteSectionAssync(int sectionId, int ityId);
+
         Task<string> GetCityNameAsync(int id);
 
         Task<IEnumerable<AdminLocationListingBasicServiceModel>> GetAllCitiesBasicAsync();
@@ -33,5 +35,7 @@ namespace HomeZone.Services.Admin.Contracts
         Task<IEnumerable<AdminSectionListingBasicModel>> GetAllSectionByFirstCity();
 
         Task<bool> ContainsSectionAsync(int cityId, int locationId);
+
+        Task<int> TotalAsync();
     }
 }
