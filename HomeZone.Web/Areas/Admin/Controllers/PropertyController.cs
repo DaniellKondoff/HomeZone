@@ -23,13 +23,15 @@ namespace HomeZone.Web.Areas.Admin.Controllers
             this.locationService = locationService;
         }
 
-        public async Task<IActionResult> ListAll()
+        public async Task<IActionResult> ListAll(int page = 1)
         {
-            var properties = await this.propertyServce.ListAllAsync();
+            var properties = await this.propertyServce.ListAllAsync(page);
 
             var listViewModel = new PropertyListingViewModel
             {
-                Properties = properties
+                Properties = properties,
+                CurrentPage = page,
+                TotalProperties = await this.propertyServce.TotalAsync()
             };
 
             return View(listViewModel);

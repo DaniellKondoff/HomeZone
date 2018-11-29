@@ -7,10 +7,14 @@ namespace HomeZone.Services.Contracts
 {
     public interface ILoanPropertyService
     {
-        Task<IEnumerable<ListingPropertyServiceModel>> AllAsync();
+        Task<IEnumerable<ListingPropertyServiceModel>> AllAsync(int page);
 
         Task<PropertyDetailsServiceModel> DetailsAsync(int id);
 
-        Task<IEnumerable<ListingPropertyServiceModel>> SearchedAllAsync(int cityId, int locationId, RoomType roomType);
+        Task<IEnumerable<ListingPropertyServiceModel>> SearchedAllAsync(int cityId, int locationId, RoomType roomType, int page);
+
+        Task<int> TotalAsync();
+
+        Task<int> TotalSeachedAsync(int cityId, int locationId, RoomType roomType);
     }
 }

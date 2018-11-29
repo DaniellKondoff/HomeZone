@@ -7,21 +7,26 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static HomeZone.Services.ServiceConstants;
 
 namespace HomeZone.Services.Implementation
 {
     public class SoldPropertyService : ISoldPropertyService
     {
         private readonly HomeZoneDbContext db;
+
         public SoldPropertyService(HomeZoneDbContext db)
         {
             this.db = db;
         }
 
-        public async Task<IEnumerable<PropertyListingServiceModel>> AllAsync()
+        public async Task<IEnumerable<PropertyListingServiceModel>> AllAsync(int page)
         {
             return await this.db.Properties
                .Where(p => p.IsForRent == false && p.IsSold == false)
+               .OrderByDescending(a => a.Id)
+               .Skip((page - 1) * PropertyListingPageSize)
+               .Take(PropertyListingPageSize)
                .ProjectTo<PropertyListingServiceModel>()
                .ToListAsync();
         }
@@ -36,7 +41,7 @@ namespace HomeZone.Services.Implementation
             }
 
             var property = await this.db.Properties.FindAsync(propertyId);
-        
+
             if (property == null)
             {
                 return false;
@@ -79,12 +84,12 @@ namespace HomeZone.Services.Implementation
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<PropertyListingServiceModel>> SearchedAllAsync(int cityId, int locationId, RoomType roomType, 
+        public async Task<IEnumerable<PropertyListingServiceModel>> SearchedAllAsync(int cityId, int locationId, RoomType roomType,
             int fromSpaceId, int toSpaceId, int fromPriceId, int toPriceId)
         {
             IEnumerable<PropertyListingServiceModel> results;
 
-            results =  await this.db.Properties
+            results = await db.Properties
                .Where(p => p.IsForRent == false && p.CityId == cityId && p.SectionId == locationId && p.RoomType == roomType && p.IsSold == false)
                .ProjectTo<PropertyListingServiceModel>()
                .ToListAsync();
@@ -94,6 +99,38 @@ namespace HomeZone.Services.Implementation
                 return results;
             }
 
+            results = Filter(fromSpaceId, toSpaceId, fromPriceId, toPriceId, results);
+
+            return results;
+        }
+
+        public async Task<IEnumerable<PropertyListingServiceModel>> SearchedAllAsync(int cityId, int locationId, RoomType roomType, int fromSpaceId, int toSpaceId, int fromPriceId, int toPriceId, int page)
+        {
+            IEnumerable<PropertyListingServiceModel> results;
+
+            results = await db.Properties
+               .Where(p => p.IsForRent == false && p.CityId == cityId && p.SectionId == locationId && p.RoomType == roomType && p.IsSold == false)
+               .ProjectTo<PropertyListingServiceModel>()
+               .ToListAsync();
+
+            if (fromSpaceId == -1 && toSpaceId == -1 && fromPriceId == -1 && toPriceId == -1)
+            {
+                return results
+                    .OrderByDescending(a => a.Id)
+                    .Skip((page - 1) * PropertyListingPageSize)
+                    .Take(PropertyListingPageSize);
+            }
+
+            results = Filter(fromSpaceId, toSpaceId, fromPriceId, toPriceId, results);
+
+            return results
+                    .OrderByDescending(a => a.Id)
+                    .Skip((page - 1) * PropertyListingPageSize)
+                    .Take(PropertyListingPageSize);
+        }
+
+        private static IEnumerable<PropertyListingServiceModel> Filter(int fromSpaceId, int toSpaceId, int fromPriceId, int toPriceId, IEnumerable<PropertyListingServiceModel> results)
+        {
             if (fromSpaceId != -1 && toSpaceId != -1)
             {
                 results = results.Where(r => r.Space >= fromSpaceId && r.Space <= toSpaceId).ToList();
@@ -102,7 +139,7 @@ namespace HomeZone.Services.Implementation
             {
                 if (fromSpaceId != -1)
                     results = results.Where(r => r.Space >= fromSpaceId).ToList();
-                else
+                else if (toSpaceId != -1)
                     results = results.Where(r => r.Space <= toSpaceId).ToList();
             }
 
@@ -114,11 +151,37 @@ namespace HomeZone.Services.Implementation
             {
                 if (fromPriceId != -1)
                     results = results.Where(r => r.Price >= fromPriceId).ToList();
-                else
+                else if (toPriceId != -1)
                     results = results.Where(r => r.Price <= toPriceId).ToList();
             }
 
             return results;
+        }
+
+        public async Task<int> TotalAsync()
+        {
+            return await this.db.Properties
+                .Where(p => p.IsForRent == false && p.IsSold == false)
+                .CountAsync();
+        }
+
+        public async Task<int> TotalSearchAsync(int cityId, int locationId, RoomType roomType, int fromSpaceId, int toSpaceId, int fromPriceId, int toPriceId)
+        {
+            IEnumerable<PropertyListingServiceModel> results;
+
+            results = await db.Properties
+               .Where(p => p.IsForRent == false && p.CityId == cityId && p.SectionId == locationId && p.RoomType == roomType && p.IsSold == false)
+               .ProjectTo<PropertyListingServiceModel>()
+               .ToListAsync();
+
+            if (fromSpaceId == -1 && toSpaceId == -1 && fromPriceId == -1 && toPriceId == -1)
+            {
+                return results.Count();
+            }
+
+            results = Filter(fromSpaceId, toSpaceId, fromPriceId, toPriceId, results);
+
+            return results.Count();
         }
     }
 }

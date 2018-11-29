@@ -1,15 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using AutoMapper.QueryableExtensions;
 using HomeZone.Data;
+using HomeZone.Data.Models;
 using HomeZone.Services.Admin.Contracts;
 using HomeZone.Services.Admin.Models.Properties;
-using AutoMapper.QueryableExtensions;
-using Microsoft.EntityFrameworkCore;
-using HomeZone.Data.Models;
-using System;
-using System.Linq;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using static HomeZone.Services.ServiceConstants;
 
 namespace HomeZone.Services.Admin.Implementation
 {
@@ -122,11 +123,19 @@ namespace HomeZone.Services.Admin.Implementation
             return roomTypeId >= 0 && roomTypeId < roomTypeCount;
         }
 
-        public async Task<IEnumerable<AdminPropertyListinServiceModel>> ListAllAsync()
+        public async Task<IEnumerable<AdminPropertyListinServiceModel>> ListAllAsync(int page)
         {
             return await this.db.Properties
+                 .OrderByDescending(a => a.Id)
+                 .Skip((page - 1) * AdminPropertyListingPageSize)
+                 .Take(AdminPropertyListingPageSize)
                  .ProjectTo<AdminPropertyListinServiceModel>()
                  .ToListAsync();
+        }
+
+        public async Task<int> TotalAsync()
+        {
+            return await this.db.Properties.CountAsync();
         }
 
         private async Task<byte[]> ConvertByteArrFromIFormFile(IFormFile file)

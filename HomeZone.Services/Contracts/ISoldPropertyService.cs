@@ -7,12 +7,12 @@ namespace HomeZone.Services.Contracts
 {
     public interface ISoldPropertyService
     {
-        Task<IEnumerable<PropertyListingServiceModel>> AllAsync();
+        Task<IEnumerable<PropertyListingServiceModel>> AllAsync(int page);
 
         Task<PropertyDetailsServiceModel> DetailsAsync(int id);
 
         Task<IEnumerable<PropertyListingServiceModel>> SearchedAllAsync(int cityId, int locationId, RoomType roomType, int fromSpaceId, int toSpaceId, 
-            int fromPriceId, int toPriceId);
+            int fromPriceId, int toPriceId, int page);
 
         Task<bool> IsBougthAsync(int propertyId);
 
@@ -21,5 +21,8 @@ namespace HomeZone.Services.Contracts
         Task<bool> ExistAsync(int id);
 
         Task<IEnumerable<SoldPropertyServiceModel>> MyHomesListAsync(string userId);
+
+        Task<int> TotalAsync();
+        Task<int> TotalSearchAsync(int cityId, int locationId, RoomType roomType, int fromSpaceId, int toSpaceId, int fromPriceId, int toPriceId);
     }
 }

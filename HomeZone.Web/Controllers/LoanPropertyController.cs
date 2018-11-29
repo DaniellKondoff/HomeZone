@@ -32,11 +32,16 @@ namespace HomeZone.Web.Controllers
             this._userManager = userManager;
         }
 
-        public async Task<IActionResult> ListAll()
+        public async Task<IActionResult> ListAll(int page = 1)
         {
-            var homes = await this.loanService.AllAsync();
+            var homes = await this.loanService.AllAsync(page);
 
-            return View(homes);
+            return View(new LoanPropertyListingModel
+            {
+                Properties = homes,
+                CurrentPage = page,
+                TotalProperties = await this.loanService.TotalAsync()
+            });
         }
 
         public async Task<IActionResult> Details(int id)
@@ -63,17 +68,22 @@ namespace HomeZone.Web.Controllers
             });
         }
 
-        public async Task<IActionResult> Searched(SearchFormModel model)
+        public async Task<IActionResult> Searched(SearchFormModel model, int page = 1)
         {
-            var searchedHome = await this.loanService.SearchedAllAsync(model.CityId, model.LocationId, model.RoomType);
+            var searchedHome = await this.loanService.SearchedAllAsync(model.CityId, model.LocationId, model.RoomType, page);
 
-            //TODO Error Message
             if (searchedHome == null)
             {
                 return BadRequest();
             }
 
-            return View(searchedHome);
+            return View(new SearchPropertiesListingModel
+            {
+                Properties = searchedHome,
+                CurrentPage = page,
+                SearchModel = model,
+                TotalProperties = await this.loanService.TotalSeachedAsync(model.CityId, model.LocationId, model.RoomType)
+            });
         }
 
         [Authorize]

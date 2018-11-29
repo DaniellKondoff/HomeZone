@@ -32,11 +32,16 @@ namespace HomeZone.Web.Controllers
             this.userManager = userManager;
         }
 
-        public async Task<IActionResult> ListAll()
+        public async Task<IActionResult> ListAll(int page = 1)
         {
-            var homes = await this.soldService.AllAsync();
+            var homes = await this.soldService.AllAsync(page);
 
-            return View(homes);
+            return View(new SoldPropertyListingModel
+            {
+                Properties = homes,
+                CurrentPage = page,
+                TotalProperties = await this.soldService.TotalAsync()
+            });
         }
 
         public async Task<IActionResult> Details(int id)
@@ -67,7 +72,7 @@ namespace HomeZone.Web.Controllers
             });
         }
 
-        public async Task<IActionResult> Searched(SearchFormModel model)
+        public async Task<IActionResult> Searched(SearchFormModel model, int page = 1)
         {
             var searchedHome = await this.soldService
                     .SearchedAllAsync(model.CityId, 
@@ -76,15 +81,28 @@ namespace HomeZone.Web.Controllers
                                       model.FromSpaceId,
                                       model.ToSpaceId,
                                       model.FromPriceId,
-                                      model.ToPriceId);
+                                      model.ToPriceId,
+                                      page);
 
-            //TODO Error Message
             if (searchedHome == null)
             {
                 return BadRequest();
             }
 
-            return View(searchedHome);
+            return View(new SearchListingModel
+            {
+                Properties = searchedHome,
+                CurrentPage = page,
+                SearchModel = model,
+                TotalProperties = await this.soldService
+                    .TotalSearchAsync(model.CityId,
+                                      model.LocationId,
+                                      model.RoomType,
+                                      model.FromSpaceId,
+                                      model.ToSpaceId,
+                                      model.FromPriceId,
+                                      model.ToPriceId)
+            });
         }
 
         [Authorize]

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static HomeZone.Services.ServiceConstants;
 
 namespace HomeZone.Services.Implementation
 {
@@ -19,10 +20,13 @@ namespace HomeZone.Services.Implementation
             this.db = db;
         }
 
-        public async Task<IEnumerable<ListingPropertyServiceModel>> AllAsync()
+        public async Task<IEnumerable<ListingPropertyServiceModel>> AllAsync(int page)
         {
             return await this.db.Properties
                 .Where(p => p.IsForRent == true && p.IsSold == false)
+                .OrderByDescending(a => a.Id)
+                .Skip((page - 1) * PropertyListingPageSize)
+                .Take(PropertyListingPageSize)
                 .ProjectTo<ListingPropertyServiceModel>()
                 .ToListAsync();
         }
@@ -35,12 +39,29 @@ namespace HomeZone.Services.Implementation
                 .FirstAsync();
         }
 
-        public async Task<IEnumerable<ListingPropertyServiceModel>> SearchedAllAsync(int cityId, int locationId, RoomType roomType)
+        public async Task<IEnumerable<ListingPropertyServiceModel>> SearchedAllAsync(int cityId, int locationId, RoomType roomType, int page)
         {
             return await this.db.Properties
                 .Where(p => p.IsForRent == true && p.CityId == cityId && p.SectionId == locationId && p.RoomType == roomType && p.IsSold == false)
+                .OrderByDescending(a => a.Id)
+                .Skip((page - 1) * PropertyListingPageSize)
+                .Take(PropertyListingPageSize)
                 .ProjectTo<ListingPropertyServiceModel>()
                 .ToListAsync();
+        }
+
+        public async Task<int> TotalAsync()
+        {
+            return await this.db.Properties
+                .Where(p => p.IsForRent == true && p.IsSold == false)
+                .CountAsync();
+        }
+
+        public async Task<int> TotalSeachedAsync(int cityId, int locationId, RoomType roomType)
+        {
+            return await this.db.Properties
+                .Where(p => p.IsForRent == true && p.CityId == cityId && p.SectionId == locationId && p.RoomType == roomType && p.IsSold == false)
+                .CountAsync();
         }
     }
 }

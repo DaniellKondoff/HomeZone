@@ -8,7 +8,7 @@ namespace HomeZone.Services.Admin.Contracts
 {
     public interface IAdminPropertyService
     {
-        Task<IEnumerable<AdminPropertyListinServiceModel>> ListAllAsync();
+        Task<IEnumerable<AdminPropertyListinServiceModel>> ListAllAsync(int page);
 
         bool IsRoomTypeExists(int roomType);
 
@@ -23,5 +23,7 @@ namespace HomeZone.Services.Admin.Contracts
         Task<bool> DeleteAsync(int id);
 
         Task<AdminPropertyDetailsServiceModel> DetailsAsync(int id);
+
+        Task<int> TotalAsync();
     }
 }
