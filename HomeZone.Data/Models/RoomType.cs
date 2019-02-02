@@ -2,10 +2,10 @@
 {
     public enum RoomType
     {
-        Едностаен = 1,
-        Двустаен = 2,
-        Тристаен = 3,
-        Четиристаен = 4,
-        Многостаен = 5
+        OneRoom = 1,
+        TwoRooms = 2,
+        ThreeRooms = 3,
+        FourRooms = 4,
+        MultiRoom = 5
     }
 }

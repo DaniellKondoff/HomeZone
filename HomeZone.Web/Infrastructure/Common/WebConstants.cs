@@ -18,5 +18,9 @@
         public const string UserTable = "UserTable";
         public const string CityTable = "CityTable";
         public const string LocationTable = "LocationTable";
+
+        public const string City = "City";
+        public const string Neighborhood = "Neighborhood";
+        public const string RoomType = "Room Type";
     }
 }
